@@ -20,7 +20,7 @@ class Kelompok extends CI_Controller
         $data['title'] = "Absen";
         $tanggal = date('Y-m-d');
         $data['jadwal'] = $this->admin->getJadwal();
-        $data['status'] = $this->admin->get('status');
+        $data['status'] = $this->admin->get('status_absen');
         $data['anggota'] = $this->admin->getAnggota();
         $this->template->load('templates/dashboard', 'kelompok/data', $data);
     }
@@ -35,6 +35,8 @@ class Kelompok extends CI_Controller
             echo json_encode(array('success' => false, 'message' => 'Tidak ada data yang diterima.'));
         }
     }
+
+
     
 
 }

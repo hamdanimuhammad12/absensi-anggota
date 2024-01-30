@@ -44,12 +44,45 @@ class Admin_model extends CI_Model
     public function getAnggota()
     {
 		$query = $this->db->query("SELECT a.id, a.nama, a.jabatan, s.status, a.group
-        FROM anggota a JOIN STATUS s ON s.group = a.group 
+        FROM anggota a JOIN status_absen s ON s.group = a.group 
         ORDER BY a.group ASC");
 		$result = $query->result_array();
 		$query->free_result();
 		return $result;
 	}
+
+    public function getHadir()
+    {
+		$query = $this->db->query("SELECT aa.nama, aa.jabatan, aa.group, a.ket FROM absen a JOIN anggota aa ON aa.id = a.anggota_id WHERE a.status = 'Piket Hadir'");
+		$result = $query->result_array();
+		$query->free_result();
+		return $result;
+	}
+
+    public function getCabang()
+    {
+		$query = $this->db->query("SELECT aa.nama, aa.jabatan, aa.group, a.ket FROM absen a JOIN anggota aa ON aa.id = a.anggota_id WHERE a.status = 'Cadangan Piket'");
+		$result = $query->result_array();
+		$query->free_result();
+		return $result;
+	}
+
+    public function getLepas()
+    {
+		$query = $this->db->query("SELECT aa.nama, aa.jabatan, aa.group, a.ket FROM absen a JOIN anggota aa ON aa.id = a.anggota_id WHERE a.status = 'Lepas Piket'");
+		$result = $query->result_array();
+		$query->free_result();
+		return $result;
+	}
+
+    public function getIzin()
+    {
+		$query = $this->db->query("SELECT aa.nama, aa.jabatan, aa.group, a.ket FROM absen a JOIN anggota aa ON aa.id = a.anggota_id WHERE a.status = 'Tidak Hadir'");
+		$result = $query->result_array();
+		$query->free_result();
+		return $result;
+	}
+    
 
     public function getJadwal()
     {
@@ -65,8 +98,55 @@ class Admin_model extends CI_Model
         $this->db->insert('absen', $data);
     }
 
+
+    public function countHadir($table)
+    {
+
+        $tanggal = date('Y-m-d');
+        $this->db->where('status =', "Piket Hadir");
+        $this->db->where('tanggal =', $tanggal);
+        $query = $this->db->get($table);
+        return $query->num_rows();
+        // $this->db->where('delete_date', null);
+        //  $this->db->count_all($table);
+    }
    
 
+    public function countCadang($table)
+    {
+
+        $tanggal = date('Y-m-d');
+        $this->db->where('status =', "Piket Hadir");
+        $this->db->where('tanggal =', $tanggal);
+        $query = $this->db->get($table);
+        return $query->num_rows();
+        // $this->db->where('delete_date', null);
+        //  $this->db->count_all($table);
+    }
+
+    public function countLepas($table)
+    {
+
+        $tanggal = date('Y-m-d');
+        $this->db->where('status =', "Cadangan Piket");
+        $this->db->where('tanggal =', $tanggal);
+        $query = $this->db->get($table);
+        return $query->num_rows();
+        // $this->db->where('delete_date', null);
+        //  $this->db->count_all($table);
+    }
+
+    public function countIzin($table)
+    {
+
+        $tanggal = date('Y-m-d');
+        $this->db->where('status =', "Lepas Piket");
+        $this->db->where('tanggal =', $tanggal);
+        $query = $this->db->get($table);
+        return $query->num_rows();
+        // $this->db->where('delete_date', null);
+        //  $this->db->count_all($table);
+    }
    
 
 	
